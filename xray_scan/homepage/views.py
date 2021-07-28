@@ -11,7 +11,7 @@ import numpy as np
 
 
 
-with  open('./models/labels.json','r') as f:
+with  open('./xray_scan/models/labels.json','r') as f:
     labelInfo=f.read()
 
 labelInfo=json.loads(labelInfo)
@@ -20,7 +20,7 @@ labelInfo=json.loads(labelInfo)
 # with model_graph.as_default():
 #     tf_session=tf.compat.v1.keras.backend.get_session()
 #     with tf_session.as_default():
-model=load_model('./models/PNP.h5')
+model=load_model('./xray_scan/models/PNP.h5')
 
 # Create your views here.
 def homepage(request):
