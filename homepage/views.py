@@ -1,3 +1,4 @@
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render,redirect
 from .models import *
 from .forms import *
@@ -26,9 +27,7 @@ model=load_model('./models/PNP.h5')
 def homepage(request):
     if os.path.exists('homepage/static/homepage/image/image.jpg'):
         os.remove('homepage/static/homepage/image/image.jpg')
-    object1=Upload_img.objects.all()
-    if len(object1)>0:
-        Upload_img.objects.all().delete()
+
     context={}
     form=Upload_form(request.POST or None, request.FILES or None)
     # print(request.FILES['img'])
@@ -38,14 +37,14 @@ def homepage(request):
     'form':form}
     # context={}
 
-        
     if form.is_valid():
-        print('in')
-        form.save()
+        myfile = request.FILES['img']
+        file_ext = str(myfile.name).split('.')[-1]
+        fs = FileSystemStorage()
+        filename = fs.save("homepage/static/homepage/image/image.%s" % file_ext, myfile)
         return redirect('disp')
         # else:
             # print('invalid form')
-
 
     return render(request,'homepage/index.html',context)
 
@@ -53,7 +52,6 @@ def homepage(request):
 def display_img(request):
     path='homepage/static/homepage/image/'
     filename=os.listdir(path)
-    print(filename)
     os.rename(os.path.join(path,filename[0]),os.path.join(path,'image.jpg'))
 
     img=image.load_img(os.path.join(path,'image.jpg'),grayscale=True ,target_size=(180,180))
@@ -63,7 +61,7 @@ def display_img(request):
     # with model_graph.as_default():
     #     tf_session=tf.compat.v1.keras.backend.get_session()
     #     with tf_session.as_default():
-    print("this is x",x.shape)
+    print("this is x", x.shape)
     pred=model.predict(x)
 
     print(pred)
