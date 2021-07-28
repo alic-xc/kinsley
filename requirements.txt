@@ -34,3 +34,6 @@ Werkzeug==2.0.1
 wrapt==1.12.1
 django-heroku
 gunicorn
+python-decouple
+psycopg2==2.8.6
+

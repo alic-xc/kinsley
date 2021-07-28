@@ -49,6 +49,7 @@ def homepage(request):
 
     return render(request,'homepage/index.html',context)
 
+
 def display_img(request):
     path='homepage/static/homepage/image/'
     filename=os.listdir(path)
