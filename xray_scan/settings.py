@@ -54,17 +54,16 @@ MIDDLEWARE = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 ROOT_URLCONF = 'xray_scan.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'homepage/template')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,4 +125,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-django_heroku.settings(locals())
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'statics')]
+
+
+# django_heroku.settings(locals())
+
+LOGOUT_REDIRECT_URL = 'login'
+
+LOGIN_URL = 'login'

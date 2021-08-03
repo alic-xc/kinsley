@@ -1,0 +1,211 @@
+{% load humanize %}
+{% load customer_custom_tags %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Interest Rate</th>
+            <th>Payment Cycle</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions.results %}
+            <tr >
+                <td>
+                    {{ forloop.counter }}
+                </td>
+                <td>{{ transaction.date|string_to_date }}</td>
+                <td>{{ transaction.token }}</td>
+                <td><b>{{ transaction.details.amount|floatformat:2|intcomma }}</b></td>
+                <td><b>{{ transaction.details.transaction_charge }}</b></td>
+                <td><b>{{ transaction.details.currency }}</b></td>
+                <td>
+                    {% if transaction.trans_type == 'deposit' %}
+                        <span> Deposit </span>
+                    {% elif transaction.trans_type == 'withdraw' %}
+                        <span> Withdrawal </span>
+                    {% elif transaction.trans_type == 'transfer_user' %}
+                        <span> Transfer to User </span>
+                    {% elif transaction.trans_type == 'transfer_bank' %}
+                        <span> Transfer to Bank</span>
+                    {% elif transaction.trans_type == 'acceptance' %}
+                        <span> Acceptance </span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if transaction.trans_type == 'transfer_user' %}
+                      {{ transaction.details.user }}
+                    {% elif transaction.trans_type == 'acceptance' %}
+                      {{ transaction.details.sender }}
+                    {% else %}
+                        {{ transaction.details.user }}
+                   {% endif %}
+                </td>
+                <td>
+                    {% if transaction.status == 'processing' %}
+                        <span class="badge badge-warning" data-toggle="tooltip" data-original-title=''>processing</span>
+                    {% elif transaction.status == 'success' %}
+                        <span class="badge badge-success" data-toggle="tooltip" data-original-title=''>success</span>
+                    {% else %}
+                        <span class="badge badge-danger" data-toggle="tooltip" data-original-title=''>error</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="#" data-toggle="modal" data-target="#transaction-id-{{ transaction.token }}"><i class="fa fa-eye" ></i></a>
+                    <a href="{% url 'transaction' transaction.token %}"><i class="fa fa-search" ></i></a>
+                    <div id="transaction-id-{{ transaction.token }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0" id="myModalLabel"> Transaction Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="px-3">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2">Amount <span class="float-right text-3">{{ transaction.details.currency }} {{ transaction.details.amount|intcomma  }} </span></li>
+                                                {% for title, charge in transaction.details.charges.items %}
+                                                    <li class="mb-2">{{ title }} <span class="float-right text-3"> {{ charge.value_charge_currency }} {{ charge.value_charged|default:0.00 }} </span></li>
+                                                {% empty %}
+                                                    <li class="mb-2">Fee <span class="float-right text-3"> 0.00 </span></li>
+                                                {% endfor %}
+                                            </ul>
+                                            <hr class="mb-2">
+                                            <p class="d-flex align-items-center mb-4">Total Amount
+                                                <span class="text-3 ml-auto">
+                                                    {{ transaction.details.currency }}
+                                                    {% if transaction.trans_type == 'deposit' %}
+                                                        {{ transaction.details.amount_deducted|intcomma }}
+                                                    {% else %}
+                                                        {{ transaction.details.total_deductible|intcomma }}
+                                                    {% endif %}
+                                                </span>
+                                            </p>
+                                            <ul class="list-unstyled">
+                                                <li class="font-weight">Transaction Type</li>
+                                                <li class="text-muted">
+                                                    {% if transaction.trans_type == 'deposit' %}
+                                                        <span> Deposit </span>
+                                                    {% elif transaction.trans_type == 'withdraw' %}
+                                                        <span> Withdrawal </span>
+                                                    {% elif transaction.trans_type == 'transfer_user' %}
+                                                        <span> Transfer to User </span>
+                                                    {% elif transaction.trans_type == 'transfer_bank' %}
+                                                        <span> Transfer to Bank</span>
+                                                    {% elif transaction.trans_type == 'acceptance' %}
+                                                        <span> Acceptance </span>
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                            {% if transaction.trans_type == 'transfer_user' %}
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Performed by:</li>
+                                                    <li class="text-muted">{{ transaction.details.user }}</li>
+                                                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Send to:</li>
+                                                    <li class="text-muted">{{ transaction.details.recipient.name }} ({{ transaction.details.recipient.account }})</li>
+                                                </ul>
+                                            {% elif transaction.trans_type == 'acceptance' %}
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Received from:</li>
+                                                    <li class="text-muted"> {{ transaction.details.sender }}</li>
+                                                </ul>
+                                            {% else %}
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Performed by:</li>
+                                                    <li class="text-muted">{{ transaction.details.user }}</li>
+                                                </ul>
+                                           {% endif %}
+
+                                          <ul class="list-unstyled">
+                                            <li class="font-weight-500">Transaction ID:</li>
+                                            <li class="text-muted">{{ transaction.token }}</li>
+                                          </ul>
+                                          {% if transaction.trans_type == 'transfer_user' %}
+                                              <ul class="list-unstyled">
+                                                  <li class="font-weight-500">REF ID:</li>
+                                                  <li class="text-muted">{{ transaction.details.recipient.acceptance_token }} <a href="{% url 'transaction_trail' transaction.token transaction.details.recipient.acceptance_token %}"><i class="fa fa-arrow-alt-circle-right"></i></a></li>
+                                              </ul>
+                                          {% elif transaction.trans_type == 'acceptance'  %}
+                                              <ul class="list-unstyled">
+                                                  <li class="font-weight-500">REF ID:</li>
+                                                  <li class="text-muted">{{ transaction.details.transfer_token }} <a href="{% url 'transaction_trail' transaction.details.transfer_token transaction.token  %}"><i class="fa fa-arrow-alt-circle-right"></i></a></li>
+                                              </ul>
+                                          {% endif %}
+                                          <ul class="list-unstyled">
+                                            <li class="font-weight-500">Status:</li>
+                                            <li class="text-muted">{{ transaction.status }}</li>
+                                          </ul>
+
+                                          {% if transaction.trans_type == 'withdraw' %}
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Name:</li>
+                                                    <li class="text-muted">{{ transaction.details.bank.name }}</li>
+                                                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Account Number:</li>
+                                                    <li class="text-muted">{{ transaction.details.bank.acc_no }}</li>
+                                                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Account Name</li>
+                                                    <li class="text-muted">{{ transaction.details.bank.acc_name }}</li>
+                                                </ul>
+                                           {% endif %}
+                                           {% if transaction.trans_type == 'transfer_bank' %}
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Name:</li>
+                                                    <li class="text-muted">{{ transaction.details.recipient.bank }}</li>
+                                                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Account Number:</li>
+                                                    <li class="text-muted">{{ transaction.details.recipient.account_no }}</li>
+                                                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li class="font-weight-500">Bank Account Name</li>
+                                                    <li class="text-muted">{{ transaction.details.recipient.account_name }}</li>
+                                                </ul>
+                                           {% endif %}
+                                        </div>
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="9" class="text-center text-danger"> No results found</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% if pagination == True %}
+    <p class="text-center mt-4"> Total entries: {{ transactions.count }}</p>
+    <ul class="pagination justify-content-center mb-0">
+        {% if prev_page_url %}
+            <li class="page-item"> <a class="page-link" href="{{ prev_page_url }}" tabindex="-1"><i class="fa fa-angle-left"></i> Prev</a> </li>
+        {% else %}
+            <li class="page-item disabled"> <a class="page-link" href="#" tabindex="-1"><i class="fa fa-angle-left"></i> Prev</a> </li>
+        {% endif %}
+
+
+        {% if next_page_url %}
+            <li class="page-item"> <a class="page-link" href="{{ next_page_url }}">Next <i class="fa fa-angle-right"></i></a> </li>
+        {% else %}
+            <li class="page-item disabled"> <a class="page-link" href="" tabindex="-1">Next <i class="fa fa-angle-right"></i></a> </li>
+        {% endif %}
+    </ul>
+{% endif %}

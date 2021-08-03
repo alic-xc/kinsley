@@ -1,0 +1,178 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block stylesheet %}
+    <link href="{% static 'assets/css/bootstrap-select.min.css' %}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fint.js"></script>
+    <style type="text/css">
+
+            /* Bootstrap-select */
+.bootstrap-select.form-control {
+  padding: 0;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover, .bootstrap-select > .dropdown-toggle.bs-placeholder:focus, .bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select .dropdown-item:focus, .bootstrap-select .dropdown-item:hover:not(.dropdown-item.active) {
+  background-color: #f5f5f5;
+}
+.bootstrap-select .dropdown-menu li.active small {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.bootstrap-select > .dropdown-toggle {
+  padding: .700rem 1.50rem .700rem .75rem !important;
+  box-shadow: none !important;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.custom-select:after {
+  border: none;
+}
+.bootstrap-select .dropdown-toggle.custom-select .filter-option {
+  height: auto;
+}
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select .dropdown-menu li a {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select.fit-width .dropdown-toggle .filter-option {
+  width: auto;
+}
+.bootstrap-select > select.mobile-device:focus + .dropdown-toggle, .bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+}
+
+.currency-flag {
+  min-width: 24px;
+}
+
+.currency-flag-sm {
+  min-width: 16px;
+}
+
+.currency-flag-lg {
+  min-width: 36px;
+}
+
+    </style>
+{% endblock %}
+{% block content %}
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0 font-size-18 mr-4">Pneumonia Questioniare</h4>
+                </div>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pneumonia</a></li>
+                        <li class="breadcrumb-item active">Questions</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Question</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% form.as_p %}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block script %}
+        <script src="{% static 'assets/js/pages/bootstrap-select.min.js' %}"></script>
+        <script>
+            $(document).ready(function(){
+                $('.customer-row-link').click(function(){
+                    window.location = $(this).data('href')
+                })
+                $('#currencyToggle').on('click', function(){
+                    $('.hide-js').toggle()
+                })
+                $('#toCurrency').change(function(){
+                    autoDetectConverter()
+                })
+                $('#quickBaseCurrency').change(function () {
+                    autoDetectQuickConverter()
+                })
+                $('#quickToCurrency').change(function () {
+                    autoDetectQuickConverter()
+                })
+                $('#quickAmount').keyup(function () {
+                    autoDetectQuickConverter()
+                })
+
+            })
+        </script>
+        <script>
+         function autoDetectConverter(){
+             let baseCurrency = document.querySelector('#baseCurrency').value
+             let toCurrency = document.querySelector('#toCurrency').value
+             const amount = (document.querySelector('#amount').value).split(',').join('')
+             const converterText = document.querySelector('#currencyDisplay')
+             if(baseCurrency.length === 3 && toCurrency.length === 3 && amount > 0){
+                 url = "" + "?switch=on&userCurrency=" + baseCurrency + "&recipientCurrency=" + toCurrency + "&amount=" + amount
+                 const request = new XMLHttpRequest();
+                 request.open("GET", url)
+                 request.onload = function(){
+                      const {result} = JSON.parse(request.response);
+                     converterText.innerHTML = MoneyFormatter(result['result'], toCurrency )
+                 }
+                 request.send()
+             }
+         }
+         function autoDetectQuickConverter(){
+             let baseCurrency = document.querySelector('#quickBaseCurrency').value
+             let toCurrency = document.querySelector('#quickToCurrency').value
+             const amount = document.querySelector('#quickAmount').value
+             const converterText = document.querySelector('#converter')
+             console.log(baseCurrency)
+             console.log(toCurrency)
+             console.log(amount)
+             if(baseCurrency.length === 3 && toCurrency.length === 3 && amount > 0){
+                 url = "" + "?switch=on&userCurrency=" + baseCurrency + "&recipientCurrency=" + toCurrency + "&amount=" + amount
+                 const request = new XMLHttpRequest();
+                 request.open("GET", url)
+                 request.onload = function(){
+                     if(request.status === 200){
+                            const {result} = JSON.parse(request.response);
+                            console.log(result)
+                            converterText.innerHTML = `<span class='text-muted'>Total fees - ${MoneyFormatter(result['result'], toCurrency)} </span><br> <span class='text-muted'>The current exchange rate is 1 ${baseCurrency} = ${MoneyFormatter(result['info']['rate'], toCurrency)}</span>`
+                      }else{
+                          converterText.innerHTML = 'Unable to convert currency'
+                      }
+                 }
+                 request.send()
+             }
+         }
+         function MoneyFormatter(amount, cur){
+             let formatter = new Intl.NumberFormat('en-US', {
+                 style: 'currency',
+                 currency: cur,
+             });
+             return formatter.format(amount);
+         }
+        </script>
+{% endblock %}

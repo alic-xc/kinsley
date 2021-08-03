@@ -1,0 +1,217 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block stylesheet %}
+    <link href="{% static 'assets/css/bootstrap-select.min.css' %}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fint.js"></script>
+    <style type="text/css">
+
+            /* Bootstrap-select */
+.bootstrap-select.form-control {
+  padding: 0;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover, .bootstrap-select > .dropdown-toggle.bs-placeholder:focus, .bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select .dropdown-item:focus, .bootstrap-select .dropdown-item:hover:not(.dropdown-item.active) {
+  background-color: #f5f5f5;
+}
+.bootstrap-select .dropdown-menu li.active small {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.bootstrap-select > .dropdown-toggle {
+  padding: .700rem 1.50rem .700rem .75rem !important;
+  box-shadow: none !important;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.custom-select:after {
+  border: none;
+}
+.bootstrap-select .dropdown-toggle.custom-select .filter-option {
+  height: auto;
+}
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select .dropdown-menu li a {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select.fit-width .dropdown-toggle .filter-option {
+  width: auto;
+}
+.bootstrap-select > select.mobile-device:focus + .dropdown-toggle, .bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+}
+
+.currency-flag {
+  min-width: 24px;
+}
+
+.currency-flag-sm {
+  min-width: 16px;
+}
+
+.currency-flag-lg {
+  min-width: 36px;
+}
+
+    </style>
+{% endblock %}
+{% block content %}
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0 font-size-18 mr-4">Pneumonia Questioniare</h4>
+                </div>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pneumonia</a></li>
+                        <li class="breadcrumb-item active">Questions</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Question</h4>
+                </div>
+                <div class="card-body">
+                    <h4>Please, fill the form below.</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+
+                        <div class="col-6">
+                            <div class="mt-5">
+                            <h5> User Info</h5>
+                                <hr/>
+                            </div>
+                                    <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" class="form-control" placeholder="First Name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" placeholder="Email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input type="number" class="form-control" placeholder="Mobile Number" name="phone" required>
+
+                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mt-5">
+                                <h5>Pneumonia Symptoms</h5>
+                                <hr/>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="cough" id="cough">
+                                        <label class="form-check-label" for="cough">
+                                            Coughing
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="fever" id="fever">
+                                        <label class="form-check-label" for="fever">
+                                            Fever
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="shaking_chills" id="shaking_chills">
+                                        <label class="form-check-label" for="shaking_chills">
+                                            Shaking Chills
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="fast_hearthbeat" id="fast_hearthbeat">
+                                        <label class="form-check-label" for="fast_hearthbeat">
+                                            Fast Heartbeat
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="nausea" id="nausea">
+                                        <label class="form-check-label" for="nausea">
+                                            Nausea
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="vomiting" id="vomiting">
+                                        <label class="form-check-label" for="vomiting">
+                                            Vomiting
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="muscle_pain" id="muscle_pain">
+                                        <label class="form-check-label" for="muscle_pain">
+                                            Muscle Pain
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="cyanosis" id="cyanosis">
+                                        <label class="form-check-label" for="cyanosis">
+                                            Cyanosis
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-4">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="headache" id="headache">
+                                        <label class="form-check-label" for="headache">
+                                            Headache
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary btn-sm mt-4">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block stylesheet %}
+    <link href="{% static 'assets/css/bootstrap-select.min.css' %}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fint.js"></script>
+    <style type="text/css">
+
+            /* Bootstrap-select */
+.bootstrap-select.form-control {
+  padding: 0;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover, .bootstrap-select > .dropdown-toggle.bs-placeholder:focus, .bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select .dropdown-item:focus, .bootstrap-select .dropdown-item:hover:not(.dropdown-item.active) {
+  background-color: #f5f5f5;
+}
+.bootstrap-select .dropdown-menu li.active small {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.bootstrap-select > .dropdown-toggle {
+  padding: .700rem 1.50rem .700rem .75rem !important;
+  box-shadow: none !important;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.custom-select:after {
+  border: none;
+}
+.bootstrap-select .dropdown-toggle.custom-select .filter-option {
+  height: auto;
+}
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select .dropdown-menu li a {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select.fit-width .dropdown-toggle .filter-option {
+  width: auto;
+}
+.bootstrap-select > select.mobile-device:focus + .dropdown-toggle, .bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+}
+
+.currency-flag {
+  min-width: 24px;
+}
+
+.currency-flag-sm {
+  min-width: 16px;
+}
+
+.currency-flag-lg {
+  min-width: 36px;
+}
+
+    </style>
+{% endblock %}
+{% block content %}
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0 font-size-18 mr-4">Pneumonia Questioniare</h4>
+                </div>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pneumonia</a></li>
+                        <li class="breadcrumb-item active">Questions</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Medical Result</h4>
+                    <b class="text-danger">{{ question.get_question_result.msg }}</b>
+                </div>
+                <div class="card-body">
+                    <p class="clearfix font-16"><span class="float-left"> Coughing </span> <span class="float-right text-muted">{% if question.cough %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Fever </span> <span class="float-right text-muted"> {% if question.fever %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left">Shaking Chills </span> <span class="float-right text-muted"> {% if question.shaking_chills %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left">Fast Heartbeat </span> <span class="float-right text-muted"> {% if question.fast_heartbeat %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Nausea</span> <span class="float-right text-muted"> {% if question.nausea %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Vomiting </span> <span class="float-right text-muted"> {% if question.vomiting %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left">Muscle Pain </span> <span class="float-right text-muted"> {% if question.muscle_pain %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Cyanosis </span> <span class="float-right text-muted"> {% if question.cyanosis %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left">Headache </span> <span class="float-right text-muted"> {% if question.headache %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                </div>
+            </div>
+             <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">X-Ray Result</h4>
+                </div>
+                <div class="card-body">
+                    <p class="clearfix font-16"><span class="float-left"> Pneumonia Diagnosed </span> <span class="float-right text-muted">{% if question.xray_scan %}Done{% else %} Not Yet {% endif %}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Pneumonia point </span> <span class="float-right text-muted">{{ question.pneumonia_point }}</span></p>
+                    <p class="clearfix font-16"><span class="float-left">Pneumonia</span><span class="float-right text-muted">{% if question.is_pneumonia_patient %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">User Info</h4>
+                </div>
+                <div class="card-body">
+                    <p class="clearfix font-16"><span class="float-left"> Name </span> <span class="float-right text-muted">{{ question.name }}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Email </span> <span class="float-right text-muted">{{ question.email }}</span></p>
+                    <p class="clearfix font-16"><span class="float-left"> Phone </span> <span class="float-right text-muted">{{ question.phone }}</span></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">X-Ray Detection</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="file" name="img" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Scan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

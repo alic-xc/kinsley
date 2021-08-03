@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block stylesheet %}
+    <link href="{% static 'assets/css/bootstrap-select.min.css' %}" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fint.js"></script>
+    <style type="text/css">
+
+            /* Bootstrap-select */
+.bootstrap-select.form-control {
+  padding: 0;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover, .bootstrap-select > .dropdown-toggle.bs-placeholder:focus, .bootstrap-select > .dropdown-toggle.bs-placeholder:active {
+  color: #4c4d4d;
+  font-weight: normal;
+}
+.bootstrap-select .dropdown-item:focus, .bootstrap-select .dropdown-item:hover:not(.dropdown-item.active) {
+  background-color: #f5f5f5;
+}
+.bootstrap-select .dropdown-menu li.active small {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.bootstrap-select > .dropdown-toggle {
+  padding: .700rem 1.50rem .700rem .75rem !important;
+  box-shadow: none !important;
+  font-weight: normal;
+}
+.bootstrap-select > .dropdown-toggle.custom-select:after {
+  border: none;
+}
+.bootstrap-select .dropdown-toggle.custom-select .filter-option {
+  height: auto;
+}
+.bootstrap-select .dropdown-toggle .filter-option-inner-inner {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select .dropdown-menu li a {
+  -ms-flex-align: center !important;
+  align-items: center !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+.bootstrap-select.fit-width .dropdown-toggle .filter-option {
+  width: auto;
+}
+.bootstrap-select > select.mobile-device:focus + .dropdown-toggle, .bootstrap-select .dropdown-toggle:focus {
+  outline: none !important;
+}
+
+.currency-flag {
+  min-width: 24px;
+}
+
+.currency-flag-sm {
+  min-width: 16px;
+}
+
+.currency-flag-lg {
+  min-width: 36px;
+}
+
+    </style>
+{% endblock %}
+{% block content %}
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0 font-size-18 mr-4">Pneumonia Reports</h4>
+                </div>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pneumonia</a></li>
+                        <li class="breadcrumb-item active">Reports</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h4 class="card-title">Reports</h4>
+                    <b class="text-danger"></b>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover datatable nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Pneumonia Diagnosed </th>
+            <th>Pneumonia Patient</th>
+            <th>Pneumonia Code</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for question in questions %}
+            <tr>
+                <td>{{ question.date }}</td>
+                <td>{{ question.name }}</td>
+                <td>{{ question.phone }}</td>
+                <td>{% if question.xray_scan %}Done{% else %} Not Yet {% endif %}</td>
+                <td>{% if question.is_pneumonia_patient %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</td>
+                <td>{{ question.pneumonia_point }}</td>
+                <td><a href="{{ question.get_absolute_url }}">View</a></td>
+
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="9" class="text-center text-danger">No record found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
