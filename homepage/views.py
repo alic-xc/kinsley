@@ -8,17 +8,17 @@ from django.urls import reverse
 from django.views import generic
 from .forms import *
 import os
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
+# from tensorflow.keras.models import load_model
+# from tensorflow.keras.preprocessing import image
 import json
 
 
-# Load model
-with  open('./models/labels.json', 'r') as f:
-    labelInfo = f.read()
-
-labelInfo = json.loads(labelInfo)
-model = load_model('./models/PNP.h5')
+# # Load model
+# with  open('./models/labels.json', 'r') as f:
+#     labelInfo = f.read()
+#
+# labelInfo = json.loads(labelInfo)
+# model = load_model('./models/PNP.h5')
 
 #
 # def display_img(request):
@@ -108,40 +108,40 @@ class QuestionDetailView(LoginRequiredMixin, generic.FormView):
         context['question'] = Question.objects.get(id=self.kwargs['pk'])
         return context
 
-    def form_valid(self, form):
-        xray_img = self.request.FILES['img']
-        file_ext = str(xray_img.name).split('.')[-1]
-        new_name = "%s.%s" % (self.request.user.username, file_ext)
-        fs = FileSystemStorage()
-
-        # Delete already exist file
-        if os.path.exists("media/images/%s" % new_name):
-            os.remove("media/images/%s" % new_name)
-
-        filename = fs.save("media/images/%s" % new_name, xray_img)
-        # Detection
-
-        img = image.load_img(filename, grayscale=True , target_size=(180, 180))
-        x = image.img_to_array(img)
-        x = x/255
-        x = x.reshape(1, 180, 180, 1 )
-        pred = model.predict(x)
-        try:
-            question_obj = Question.objects.get(pk=self.kwargs['pk'])
-            if pred[0][0] < 0.5:
-                question_obj.is_pneumonia_patient = False
-            else:
-                question_obj.is_pneumonia_patient = True
-
-            question_obj.xray_scan = True
-            question_obj.pneumonia_point = pred[0][0]
-            question_obj.save()
-            messages.success(self.request, "Xray diagnosed successfully")
-        except Question.DoesNotExist:
-            messages.error(self.request, "Medical test not found")
-            return super().form_invalid(form)
-
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     xray_img = self.request.FILES['img']
+    #     file_ext = str(xray_img.name).split('.')[-1]
+    #     new_name = "%s.%s" % (self.request.user.username, file_ext)
+    #     fs = FileSystemStorage()
+    #
+    #     # Delete already exist file
+    #     if os.path.exists("media/images/%s" % new_name):
+    #         os.remove("media/images/%s" % new_name)
+    #
+    #     filename = fs.save("media/images/%s" % new_name, xray_img)
+    #     # Detection
+    #
+    #     img = image.load_img(filename, grayscale=True , target_size=(180, 180))
+    #     x = image.img_to_array(img)
+    #     x = x/255
+    #     x = x.reshape(1, 180, 180, 1 )
+    #     pred = model.predict(x)
+    #     try:
+    #         question_obj = Question.objects.get(pk=self.kwargs['pk'])
+    #         if pred[0][0] < 0.5:
+    #             question_obj.is_pneumonia_patient = False
+    #         else:
+    #             question_obj.is_pneumonia_patient = True
+    #
+    #         question_obj.xray_scan = True
+    #         question_obj.pneumonia_point = pred[0][0]
+    #         question_obj.save()
+    #         messages.success(self.request, "Xray diagnosed successfully")
+    #     except Question.DoesNotExist:
+    #         messages.error(self.request, "Medical test not found")
+    #         return super().form_invalid(form)
+    #
+    #     return super().form_valid(form)
 
 
 class ReportView(LoginRequiredMixin, generic.ListView):

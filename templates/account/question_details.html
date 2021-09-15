@@ -103,16 +103,16 @@
                     <p class="clearfix font-16"><span class="float-left">Headache </span> <span class="float-right text-muted"> {% if question.headache %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
                 </div>
             </div>
-             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">X-Ray Result</h4>
-                </div>
-                <div class="card-body">
-                    <p class="clearfix font-16"><span class="float-left"> Pneumonia Diagnosed </span> <span class="float-right text-muted">{% if question.xray_scan %}Done{% else %} Not Yet {% endif %}</span></p>
-                    <p class="clearfix font-16"><span class="float-left"> Pneumonia point </span> <span class="float-right text-muted">{{ question.pneumonia_point }}</span></p>
-                    <p class="clearfix font-16"><span class="float-left">Pneumonia</span><span class="float-right text-muted">{% if question.is_pneumonia_patient %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>
-                </div>
-            </div>
+{#             <div class="card">#}
+{#                <div class="card-header">#}
+{#                    <h4 class="card-title">X-Ray Result</h4>#}
+{#                </div>#}
+{#                <div class="card-body">#}
+{#                    <p class="clearfix font-16"><span class="float-left"> Pneumonia Diagnosed </span> <span class="float-right text-muted">{% if question.xray_scan %}Done{% else %} Not Yet {% endif %}</span></p>#}
+{#                    <p class="clearfix font-16"><span class="float-left"> Pneumonia point </span> <span class="float-right text-muted">{{ question.pneumonia_point }}</span></p>#}
+{#                    <p class="clearfix font-16"><span class="float-left">Pneumonia</span><span class="float-right text-muted">{% if question.is_pneumonia_patient %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</span></p>#}
+{#                </div>#}
+{#            </div>#}
         </div>
         <div class="col-6">
             <div class="card">
@@ -125,20 +125,20 @@
                     <p class="clearfix font-16"><span class="float-left"> Phone </span> <span class="float-right text-muted">{{ question.phone }}</span></p>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">X-Ray Detection</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <input type="file" name="img" class="form-control">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Scan</button>
-                    </form>
-                </div>
-            </div>
+{#            <div class="card">#}
+{#                <div class="card-header">#}
+{#                    <h4 class="card-title">X-Ray Detection</h4>#}
+{#                </div>#}
+{#                <div class="card-body">#}
+{#                    <form method="post" enctype="multipart/form-data">#}
+{#                        {% csrf_token %}#}
+{#                        <div class="form-group">#}
+{#                            <input type="file" name="img" class="form-control">#}
+{#                        </div>#}
+{#                        <button type="submit" class="btn btn-primary btn-sm">Scan</button>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </div>#}
         </div>
 
     </div>

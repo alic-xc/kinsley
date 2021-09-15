@@ -98,9 +98,7 @@
             <th>Date</th>
             <th>Name</th>
             <th>Phone</th>
-            <th>Pneumonia Diagnosed </th>
             <th>Pneumonia Patient</th>
-            <th>Pneumonia Code</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -110,9 +108,7 @@
                 <td>{{ question.date }}</td>
                 <td>{{ question.name }}</td>
                 <td>{{ question.phone }}</td>
-                <td>{% if question.xray_scan %}Done{% else %} Not Yet {% endif %}</td>
-                <td>{% if question.is_pneumonia_patient %} <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</td>
-                <td>{{ question.pneumonia_point }}</td>
+                <td>{% if question.get_question_result > 5 %}  <i class="fa fa-check text-success"></i> {% else %} <i class="fa fa-times-circle text-danger"></i> {% endif %}</td>
                 <td><a href="{{ question.get_absolute_url }}">View</a></td>
 
             </tr>

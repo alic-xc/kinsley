@@ -52,16 +52,16 @@ class Question(models.Model):
             count += 1
 
         if count <= 3:
-            return {'msg': 'Not a pnenmonia', 'code': 1}
+            return {'msg': 'Not a pneunmonia', 'code': 1}
 
         elif count > 3 and count <= 5:
-            return {'msg': 'Might likely be a pnenmonia', 'code': 2}
+            return {'msg': 'Pneumonia, but required further diagnose', 'code': 2}
 
         elif count > 5 and count <= 7:
-            return {'msg': 'Much of a pnemonia', 'code': 3}
+            return {'msg': 'Pneumonia', 'code': 3}
 
         elif count > 7:
-            return {'msg': 'A pnenmonia', 'code': 4}
+            return {'msg': 'Pneumonia', 'code': 4}
 
     def get_absolute_url(self):
         return reverse('question_details', kwargs={'pk': self.pk})
